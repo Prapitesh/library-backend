@@ -2,15 +2,13 @@
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
 
+# Install Maven
 RUN apk add --no-cache maven
 
-# Copy repo
+# Copy project files
 COPY . .
 
-# Move into Maven project directory
-WORKDIR /app/backend
-
-# Build application
+# Build the application
 RUN mvn clean package -DskipTests
 
 
@@ -18,7 +16,8 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /usr/app
 
-COPY --from=build /app/backend/target/*.jar app.jar
+# Copy only the jar from build stage
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
