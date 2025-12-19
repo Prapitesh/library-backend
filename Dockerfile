@@ -2,22 +2,23 @@
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
 
-# Copy project files
+RUN apk add --no-cache maven
+
+# Copy repo
 COPY . .
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Move into Maven project directory
+WORKDIR /app/backend
+
+# Build application
+RUN mvn clean package -DskipTests
 
 
 # ===== Runtime stage =====
 FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /usr/app/
+WORKDIR /usr/app
 
-# Copy only the jar from build stage
-COPY --from=build /app/target/*.jar /usr/app/app.jar
+COPY --from=build /app/backend/target/*.jar app.jar
 
-# Expose Spring Boot port
 EXPOSE 8080
-
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
