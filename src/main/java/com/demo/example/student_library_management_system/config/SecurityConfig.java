@@ -40,7 +40,7 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000","https://library-frontend-uad1.vercel.app"));
+        config.setAllowedOrigins(List.of("http://localhost:3000","https://library-frontend-uad1-r5cdcq55u.vercel.app"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
